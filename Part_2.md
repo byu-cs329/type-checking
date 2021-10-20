@@ -8,11 +8,11 @@ The objective of this assignment is to write tests that test the tests generated
 
 ## Requirements
 
-You will continue with your submission from part 1. Create another feature branch based on your part 1 solution branch to start on this assignment.
+You will continue with your submission from [Part 1](./Part_1.md), so first merge pull-request from [Part 1](./Part_1.md) in the the `main` branch. Then create another feature branch based to start on this assignment--that branch should not include the commits from [Part 1](./Part_1.md).
 
 ## Tests to Test the Dynamic Tests
 
-Part 1 uses visual inspection to check that the generated type proof (e.g., the `DynamicNode` returned from `TypeCheckBuilder` holding the tests for the type proof) is correct. This assignment requires tests to test those tests. In other words, create tests that make sure the set of generated dynamic tests from the `TypeCheckBuilder` is correct. A test to test the tests needs to inspect the contents and structure of the `DynamicNode` returned from the `TypeCheckBuilder` and make sure it has expected structure and content of the type proof. If it does not, then the test fails.
+Part 1 uses visual inspection to check that the generated type proof (e.g., the `DynamicNode` returned from `TypeCheckBuilder` holding the tests for the type proof) is correct. This assignment requires tests to test those tests. In other words, create tests that make sure the set of generated dynamic tests from the `TypeCheckBuilder` is correct. A test to test the tests needs to inspect the contents and structure of the `DynamicNode` returned from the `TypeCheckBuilder` and make sure it has its expected structure and content for the type proof. If it does not, then the test fails.
 
 The `DynamicNode` class provides a `DynamicNode.getDisplayName()` method. The `DynamicContainer` class gives access to the stream of nodes in the container with `DynamicContainer.getChildren()`. The `DynamicTest` class gives access to the embedded executable with `DynamicTest.getExecutable()`. The `Executable` class is able to run the test with `Executable.execute()`. If the test fails, then it throws an instance of `AssertionFailedError`. These methods provide the interface to write tests to test tests. Here is a simplistic example.
 
@@ -37,7 +37,7 @@ The `DynamicNode` class provides a `DynamicNode.getDisplayName()` method. The `D
 
 The above is more detailed than it should be for the type checker test code, but it shows some of what is possible. The `DynamicContainer` only give access to a stream, but from there it should be possible to roughly test for an expected structure it terms of display names, containers, number of tests, or even number of tests in each container.  The [lecture notes](https://bitbucket.org/byucs329/byu-cs-329-lecture-notes/src/master/type-checking.md) have a detailed discussion to what these tests might look like for the type checker.
 
-Write a minimum set of regression tests to cover the behavior of the type checker. The tests from part 1 are an excellent starting point. The only difference here is that those tests do not run directly but are rather inspected for correctness by the tests to be written for this assignment.
+Write a minimum set of regression tests to cover the behavior of the type checker. The tests from Part 1 are an excellent starting point. The only difference here is that those tests do not run directly but are rather inspected for correctness by the tests to be written for this assignment.
 
 ## PIT Mutation Analysis
 

@@ -6,7 +6,7 @@ As before, the implementation will use the [org.eclipse.jdt.core.dom](https://he
 
 The program will take no arguments as input and can only be invoked through the tests. The program should only apply to a limited subset of Java defined below. If an input file is outside the subset, then all bets are off.
 
-This project comes with code that implements a working environment (`ISymbolTable` and `SymbolTableBuilder`), tests for the that environment (`SymbolTableBuilderTests`), a partial implementation of the type checker (`TypeCheckBuilder`), and tests for that type checker (`TypeCheckBuilderTests`). The code is shipped *as is* with no guarantees. There are **no intentional defects** seeded in the code, but the code is **non-trivial** and not without complexity.
+This project comes with code that implements a working environment (`ISymbolTable` and `SymbolTableBuilder`), tests for that environment (`SymbolTableBuilderTests`), a partial implementation of the type checker (`TypeCheckBuilder`), and tests for that implemented portion of the type checker (`TypeCheckBuilderTests`). The code is shipped *as is* with no guarantees. There are **no intentional defects** seeded in the code, but the code is **non-trivial** and not without complexity.
 
 ## Reading
 
@@ -33,7 +33,7 @@ A general overview of what is and is not allowed in the Java subset for this pro
 * `InfixExpression` instances for operator `==` are always `Object,Object:boolean` where `Object` is an object type or `nullType`, `int,int:boolean`, or `boolean,boolean:boolean`
 * Assignment, `=`, between objects is like the `==` in that it requires types to be the same but with the added ability te assign objects to `null`, so `object,null:void` is type safe.
   
-The type-checker must eventually prove the following language features. The notation is the `ASTNode` type followed by the type it should have have to *type-safe*: `<ASTNode>:<type>` where `<environment>` means that it is the type defined by the environment. The types are listed in `TypeCheckTypes`.
+The type-checker must eventually prove the following language features. The notation is the `ASTNode` type followed by the type it should have to be *type-safe*: `<ASTNode>:<type>`. So the `<ASTNode>` should have `<type>` to be type safe. Additionall, the notation `<environment>` is the lookup in the environment to get the type. The types are listed in [TypeCheckTypes.java](./src/main/java/edu/byu/cs329/typechecker/TypeCheckTypes.java).
 
 * `MethodDeclaration:void` (provided)
 * `CompilationUnit:void` (provided)
@@ -54,12 +54,12 @@ The type-checker must eventually prove the following language features. The nota
 * `QualifiedName:<environment>` (e.q., `n.a`) (part 1)
 * `MethodInvocation:<environment>` (part 1)
 
-If something seems unusually hard then reach out to the instructor as it most likely out of scope or not intended.
+If something seems unusually hard then reach out to the instructor as it is most likely out of scope or not intended.
 
 ## Symbol Table Interface
 
 The project code includes a symbol table to implement the environment. It also checks many of the above properties for the Java subset and throws exceptions when it sees language features that are *out of scope* (see the code).
-Only use the `ISymbolTable` interface to construct the type proof as is patterned in the `TypeCheckBuilder` code. There are JavaDoc comments in `ISymbolTable` to define the interface. When in doubt, look at `SymbolTableBuilder`. The symbol table is provided as is. There are no intentional defects, but the code is non-trivial, so please report and fix defects discovered.
+Only use the [ISymbolTable](./src/main/java/edu/byu/cs329/typechecker/ISymbolTable.java) interface to construct the type proof as is patterned in the [TypeCheckBuilder](./src/main/java/edu/byu/cs329/typechecker/TypeCheckBuilder.java) code. There are JavaDoc comments in `ISymbolTable` to define the interface. When in doubt, look at [SymbolTableBuilder](./src/main/java/edu/byu/cs329/typechecker/SymbolTableBuilder.java). The symbol table is provided as is. There are no intentional defects, but the code is non-trivial, so please report and fix defects discovered.
 
 ## Type proof
 
@@ -73,7 +73,7 @@ An `endVisit` method, in this type check implementation,  pops the set of checks
 
 **IMPORTANT**: any leaf in the proof tree should be an actual test. For example, there should be an actual test whenever there is a lookup in the symbol table that tests that the returned type from the symbol table is not `ERROR`. So any were in the proof where there is `E(x) = type` it should be a test that `type != ERROR`. Adding the test at the lookup means that the type-proof will fail at the leaves of the tree anytime a symbol is not found in the environment.
 
-Another leaf in the proof is when checking for assignment compatibility (e.g., `int := int`). That should be in the form of a test that fails anytime the two types are not equivalent ore equal to `ERROR`.
+Another leaf in the proof is when checking for assignment compatibility (e.g., `int := int`). That should be in the form of a test that fails anytime the two types are not equivalent. That test should also fail if ether type is equal to `ERROR`.
 
 Some rules require specific types. For example, all statements in a block must have the type `void`. As such, there must be a leaf in the rule for block that tests that all statements have the type void. In the example code, the test is `void,...,void = void` where each entry in left operand list is the type of the corresponding statement. So for a block with three statements, it would be `void, void, void = void`. Follow the same pattern for other rules that require specific type combinations such as those for infix expressions.
 
