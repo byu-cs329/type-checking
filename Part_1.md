@@ -12,7 +12,7 @@ This project comes with code that implements a working environment (`ISymbolTabl
 
 It is recommended that the `TypeCheckBuilder` code and `TypeCheckBuilderTests` code be read carefully before starting the project.
 
-Review carefully the [type checking](https://bitbucket.org/byucs329/byu-cs-329-lecture-notes/src/master/type-checking.md) lecture with its companion slides [09-type-checking.ppt](https://bitbucket.org/byucs329/byu-cs-329-lecture-notes/src/master/compilers/09-type-checking.ppt). **The notes have a lot of implementation details that are worth carefully reading.** It may even be a good idea to use those notes as the starting point for the implementation. It lays out a progression and makes some suggestions on the architecture that are worth considering; regardless, do not start coding until the notes are fully understood.
+Review carefully the [type checking](https://bitbucket.org/byucs329/byu-cs-329-lecture-notes/src/master/type-checking/type-checking.md) lecture with its companion slides [09-type-checking.ppt](https://bitbucket.org/byucs329/byu-cs-329-lecture-notes/src/master/type-checking/TypeCheckingRules.pptx). **The notes have a lot of implementation details that are worth carefully reading.** It may even be a good idea to use those notes as the starting point for the implementation. It lays out a progression and makes some suggestions on the architecture that are worth considering; regardless, do not start coding until the notes are fully understood.
 
 ## Java Subset
 
