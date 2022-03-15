@@ -24,7 +24,7 @@ A general overview of what is and is not allowed in the Java subset for this pro
 * A type-proof for a compilation unit is that all methods are type-correct in the class
 * All `FieldDeclaration` instances have no **initializer**
 * Names for all entities are unique: no shadowing of any kind
-* All field references are type `FieldAccess` of the form `this.field` or `QualifiedName` of the form `n.m`
+* All field references are type `FieldAccess` of the form `this.field` or `QualifiedName` of the form `ClassName.field`
 * `int`, `boolean`, `NullType` (e.g., `NullLiteral`), and objects are the only types
 * `InfixExpression` instances for operators `+`, `-`, and `*` are always  `int,int:int` (e.g, expecting two `int` types and returning an `int` type)
 * `InfixExpression` instances for operators `&&` and `||` are always `boolean,boolean:boolean`
