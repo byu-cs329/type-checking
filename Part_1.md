@@ -38,21 +38,21 @@ The type-checker must eventually prove the following language features. The nota
 * `MethodDeclaration:void` (provided)
 * `CompilationUnit:void` (provided)
 * `Block:void` (provided)
+* `VariableDeclarationStatement:void` (provided)
+* `ExpressionStatement:void` for `Assignment`
+* `IfStatement:void`
+* `WhileStatement:void`
+* `ReturnStatement:void`
+* `PrefixExpression:boolean` for `!`
+* `InfixExpression:int` for `+`, `*`, and `-`
+* `InfixExpression:boolean` for `&&`, `||`, `<`, and `==`
 * `BooleanLiteral:boolean` (provided)
 * `NumberLiteral:int` (provided)
 * `NullLiteral:nullType` (provided)
-* `VariableDeclarationStatement:void` (provided)
 * `SimpleName:<environment>` (provided)
-* `ReturnStatement:void` (part 1)
-* `ExpressionStatement:void` for `Assignment` (part 1)
-* `PrefixExpression:boolean` for `!` (part 1)
-* `InfixExpression:int` for `+`, `*`, and `-` (part 1)
-* `InfixExpression:boolean` for `&&`, `||`, `<`, and `==` (part 1)
-* `IfStatement:void` (part 1)
-* `WhileStatement:void` (part 1)
-* `FieldAccess:<environment>` (e.g., `this.a`) (part 1)
-* `QualifiedName:<environment>` (e.q., `n.a`) (part 1)
-* `MethodInvocation:<environment>` (part 1)
+* `FieldAccess:<environment>` (e.g., `this.a`)
+* `QualifiedName:<environment>` (e.g., `ClassName.a`)
+* `MethodInvocation:<environment>`
 
 If something seems unusually hard then reach out to the instructor as it is most likely out of scope or not intended.
 
@@ -65,33 +65,33 @@ Only use the [ISymbolTable](./src/main/java/edu/byu/cs329/typechecker/ISymbolTab
 
 The [lecture notes](https://bitbucket.org/byucs329/byu-cs-329-lecture-notes/src/master/type-checking.md) are somewhat extensive on constructing the type proof and detailing a possible implementation. Take time to really understand the lecture notes before getting too far into this project.
 
-The provided partial implementation in `TypeCheckBuilder` uses two stacks to manage the type proof: `typeStack` and `typeCheckStack`. The first, `typeStack` is the return type of the most recent node in the recursion tree for the type check and is the type returned on the edges of that tree in the class lectures. The second is the set of obligations that must hold at a node in the recursion tree from lecture that determine the type to return on the edge back up to the node above. These checks are actual JUnit 5 tests (e.g. `DynamicTest` and `DynamicContainer` instances). Both stacks are manipulated using helper methods: `pushType(String)` and `popType()` for the `typeStack` or `pushTypeCheck(List<DynamicNode> proof)` and `popTypeCheck()` for `typeCheckStack`.
+The provided partial implementation in `TypeCheckBuilder` uses two stacks to manage the type proof: `typeStack` and `typeCheckStack`. The first, `typeStack` is the return type of the most recent node in the recursion tree for the type check and is the type returned on the edges of that tree in the class lectures. The second, `typeCheckStack` is the set of obligations that must hold at a node in the recursion tree from lecture that determine the type to return on the edge back up to the node above. These checks are actual JUnit 5 tests (e.g. `DynamicTest` and `DynamicContainer` instances). Both stacks are manipulated using helper methods: `pushType(String)` and `popType()` for the `typeStack` or `pushTypeCheck(List<DynamicNode> proof)` and `popTypeCheck()` for `typeCheckStack`.
 
 The recursion can be confusing, and keeping track of the state between different visit methods is confusing as well.  The provided code is one way to do it. In that code, in general, a `visit` method is a node in the recursion tree from lecture. So it pushes an empty set of checks on the `typeCheckStack` and adds obligations to that set as it progresses. Those checks represent the obligations that must be met in order for the particular element being visited to be proved *type safe*. The checks are added by the visit method as it checks different elements of the particular node being visited by calling accept methods on field members of that node as appropriate. The last thing the `visit` method does before returning is push on the `typeStack` the resulting type of the node: `error` or otherwise.
 
-An `endVisit` method, in this type check implementation,  pops the set of checks (obligations) from the `typeCheckStack` and wraps those in a container representing the type-rule for that node. In other words, when the code arrives at the `endVisit`, all the obligations for a given rule are in the container at the top of the `typeCheckStack`. So that top is popped, put in a dynamic container representing the rule for the particular `ASTNode`, and then pushed as an obligation in the new top of the `typeCheckStack`---it's all recursive! It is confusing. I agree. Read and study the provided implementations. There is a pattern for the `visit` and `endVisit` methods followed by every type. Follow that pattern!
+An `endVisit` method, in this type check implementation,  pops the set of checks (obligations) from the `typeCheckStack` and wraps those in a container representing the type-rule for that node. In other words, when the code arrives at the `endVisit`, all the obligations for a given rule are in the container at the top of the `typeCheckStack`. So that top is popped, put in a dynamic container representing the rule for the particular `ASTNode`, and then pushed as an obligation in the new top of the `typeCheckStack` &mdash; it's all recursive! It is confusing. I agree. Read and study the provided implementations. There is a pattern for the `visit` and `endVisit` methods followed by every type. Follow that pattern.
 
 **IMPORTANT**: any leaf in the proof tree should be an actual test. For example, there should be an actual test whenever there is a lookup in the symbol table that tests that the returned type from the symbol table is not `ERROR`. So any were in the proof where there is `E(x) = type` it should be a test that `type != ERROR`. Adding the test at the lookup means that the type-proof will fail at the leaves of the tree anytime a symbol is not found in the environment.
 
-Another leaf in the proof is when checking for assignment compatibility (e.g., `int := int`). That should be in the form of a test that fails anytime the two types are not equivalent. That test should also fail if ether type is equal to `ERROR`.
+Another leaf in the proof is when checking for operator compatibility (e.g., `int := int`). That should be in the form of a test that fails anytime the two types are not compatible for the specific operator. That test should also fail if ether type is equal to `ERROR`. See [TypeCheckTypes](./src/main/java/edu/byu/cs329/typechecker/TypeCheckTypes.java) for the assignment compatibility method. Follow that pattern for the other operators in the Java Subset.
 
 Some rules require specific types. For example, all statements in a block must have the type `void`. As such, there must be a leaf in the rule for block that tests that all statements have the type void. In the example code, the test is `void,...,void = void` where each entry in left operand list is the type of the corresponding statement. So for a block with three statements, it would be `void, void, void = void`. Follow the same pattern for other rules that require specific type combinations such as those for infix expressions.
 
 ## Requirements
 
-It is strongly encouraged to adopt a test driven approach to the project. Define a test, implement code to pass the test, and then repeat. Take some time at the front-end to plan out the test progression in a sensible way. A test driven approach will make the project feel more manageable (gives an obvious place to start), and it will help provide an incremental approach to implementing features.
+It is strongly encouraged to adopt a test driven approach to the project. Define a test &mdash; start small &mdash;, implement code to pass the test, and then repeat. Take some time at the front-end to plan out the test progression in a sensible way. A test driven approach will make the project feel more manageable (gives an obvious place to start), and it will help provide an incremental approach to implementing features.
 
 Implement the type rules as dynamic tests for the static type proof for the following language features:
 
-* `ReturnStatement:void`
 * `ExpressionStatement:void`
+* `ReturnStatement:void`
+* `IfStatement:void`
+* `WhileStatement:void`
 * `PrefixExpression:boolean`
 * `InfixExpression:int`
 * `InfixExpression:boolean`
-* `IfStatement:void`
-* `WhileStatement:void`
 * `FieldAccess:<T>` (e.g., `this.a`)
-* `QualifiedName:<T>` (e.q., `n.a`)
+* `QualifiedName:<T>` (e.q., `ClassName.a`)
 * `MethodInvocation:<T>`
 
 *The `<T>` means some type as defined in the environment. Please note that the fields and methods are already in the `ISymbolTable` instance generated by `ISymbolTableBuilder`.*
@@ -106,7 +106,7 @@ For this assignment, visual inspection coupled with making sure what should pass
 
 ## What to turn in?
 
-Create a pull request of your feature branch containing the solution and ensure that your Github workflow build passes (be sure you have pushed any changes to `project-utils` and have updated the submodules appropriately--see [README.md](README.md)). Submit to Canvas the URL of the pull request.
+Create a pull request of your feature branch containing the solution and ensure that your Github workflow build passes (be sure you have pushed any changes to `project-utils` and have updated the submodules appropriately &mdash; see [README.md](README.md)). Submit to Canvas the URL of the pull request.
 
 ## Rubric
 
