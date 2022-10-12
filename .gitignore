@@ -18,5 +18,4 @@ buildNumber.properties
 *.log
 .checkstyle
 .vscode
-.devcontainer
 .factorypath
