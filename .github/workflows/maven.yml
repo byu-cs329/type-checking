@@ -46,4 +46,4 @@ jobs:
         mvn -ntp -DoutputFormats=CSV test org.pitest:pitest-maven:mutationCoverage
         echo "Mutations not killed:"
         echo "File                      Line  Status       Mutator"
-        awk -F, ' $6 != "KILLED" { printf "%-25s %-5s %-12s %-40s\n", $1, $5, $6, substr($3, 48);}' target/pit-reports/*/mutations.csv; 
+        awk -F, ' $6 != "KILLED" { printf "%-25s %-5s %-12s %-40s\n", $1, $5, $6, substr($3, 48);}' target/pit-reports/mutations.csv; 
