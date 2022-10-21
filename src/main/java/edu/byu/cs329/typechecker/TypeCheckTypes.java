@@ -1,5 +1,8 @@
 package edu.byu.cs329.typechecker;
 
+/** 
+ * Types for the type proof.
+ */
 public class TypeCheckTypes {
   
   public static final String INT = "int";
@@ -26,7 +29,7 @@ public class TypeCheckTypes {
 
   /**
    * Determines if two types are assignment compatible.
-   * 
+   *
    * @param leftType type
    * @param rightType type
    * @return true if assignment compatible

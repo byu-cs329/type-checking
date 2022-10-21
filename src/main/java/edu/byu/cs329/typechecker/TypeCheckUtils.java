@@ -12,6 +12,9 @@ import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
+/**
+ * Utils for type proof.
+ */
 public class TypeCheckUtils {
 
   public static String buildName(String className, String name) {

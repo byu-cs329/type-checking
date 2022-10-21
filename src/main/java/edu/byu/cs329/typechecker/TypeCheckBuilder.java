@@ -29,18 +29,21 @@ import org.junit.jupiter.api.DynamicTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Builder for the type proof.
+ */
 public class TypeCheckBuilder {
   static final Logger log = LoggerFactory.getLogger(TypeCheckBuilder.class);
 
   class Visitor extends ASTVisitor {
-    ISymbolTable symbolTable = null;
+    SymbolTable symbolTable = null;
     String className = null;
     Deque<List<DynamicNode>> typeCheckStack = null;
     Deque<String> typeStack = null;
     int blockCounter = 0;
     int statementCounter = 0;
 
-    public Visitor(ISymbolTable symbolTable) {
+    public Visitor(SymbolTable symbolTable) {
       this.symbolTable = symbolTable;
       typeCheckStack = new ArrayDeque<>();
       pushTypeCheck(new ArrayList<>());
@@ -362,13 +365,13 @@ public class TypeCheckBuilder {
 
   /**
    * Returns true if static type safe with the checks.
-   * 
+   *
    * @param symbolTable the environment for the type checks
    * @param node the ASTNode for the compilation unit
    * @param tests a container to hold the tests
    * @return true iff the compilation is static type safe
    */
-  public boolean getTypeChecker(ISymbolTable symbolTable, ASTNode node, List<DynamicNode> tests) {
+  public boolean getTypeChecker(SymbolTable symbolTable, ASTNode node, List<DynamicNode> tests) {
     Visitor visitor = new Visitor(symbolTable);
     node.accept(visitor);
     tests.addAll(visitor.popTypeCheck());

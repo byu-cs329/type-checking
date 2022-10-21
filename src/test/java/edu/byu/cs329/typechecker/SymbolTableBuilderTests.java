@@ -81,7 +81,7 @@ public class SymbolTableBuilderTests {
   @DisplayName("Should add all fields when all fields correctly declared")
   void should_addAllFields_when_allFieldsCorrectlyDeclared() {
     ASTNode compilationUnit = JavaSourceUtils.getAstNodeFor(this, "symbolTable/should_addAllFields_when_allFieldsCorrectlyDeclared.java");
-    ISymbolTable st = stb.getSymbolTable(compilationUnit);
+    SymbolTable st = stb.getSymbolTable(compilationUnit);
     assertAll(
         () -> assertEquals(TypeCheckTypes.INT, st.getType("should_addAllFields_when_allFieldsCorrectlyDeclared.i")),
         () -> assertEquals(TypeCheckTypes.INT, st.getType("should_addAllFields_when_allFieldsCorrectlyDeclared.j")),
@@ -94,7 +94,7 @@ public class SymbolTableBuilderTests {
   @DisplayName("Should create parameter type maps when methods defined")
   void should_createParameterTypeMaps_when_methodsExist() {
     ASTNode compilationUnit = JavaSourceUtils.getAstNodeFor(this, "symbolTable/should_createParameterTypeMaps_when_methodsExist.java");
-    ISymbolTable st = stb.getSymbolTable(compilationUnit);
+    SymbolTable st = stb.getSymbolTable(compilationUnit);
     String className = "should_createParameterTypeMaps_when_methodsExist";
     String nameForM = TypeCheckUtils.buildName(className, "m");
     String nameForN = TypeCheckUtils.buildName(className, "n");
@@ -117,7 +117,7 @@ public class SymbolTableBuilderTests {
   @DisplayName("Should add and remove scopes when adding and removing locals")
   void should_addAndRemoveScopes_when_addingAndRemovingLocals() {
     ASTNode compilationUnit = JavaSourceUtils.getAstNodeFor(this, "symbolTable/should_addAllFields_when_allFieldsCorrectlyDeclared.java");
-    ISymbolTable st = stb.getSymbolTable(compilationUnit);
+    SymbolTable st = stb.getSymbolTable(compilationUnit);
     st.pushScope();
     st.addLocal("i", "int");
     st.addLocal("j", "Integer");
@@ -132,7 +132,7 @@ public class SymbolTableBuilderTests {
   @DisplayName("Should throw exception when adding duplicate local variables")
   void should_throwException_when_addingDuplicateLocalVariables() {
     ASTNode compilationUnit = JavaSourceUtils.getAstNodeFor(this, "symbolTable/should_addAllFields_when_allFieldsCorrectlyDeclared.java");
-    ISymbolTable st = stb.getSymbolTable(compilationUnit);
+    SymbolTable st = stb.getSymbolTable(compilationUnit);
     assertThrows(RuntimeException.class, () -> {
       st.pushScope();
       st.addLocal("i", "int");

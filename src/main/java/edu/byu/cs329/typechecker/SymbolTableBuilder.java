@@ -21,6 +21,9 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Builder for the symbol table.
+ */
 public class SymbolTableBuilder {
   static final Logger log = LoggerFactory.getLogger(SymbolTableBuilder.class);
 
@@ -124,20 +127,20 @@ public class SymbolTableBuilder {
 
   /**
    * Creates a symbol table for the AST.
-   * 
+   *
    * @requires node instanceof CompilationUnit
    * @requires node is the AST for a supported program
    * 
    * @param node is a CompilationUnit
    * @return the symbol table for the CompilationUnit
    */
-  public ISymbolTable getSymbolTable(ASTNode node) {
+  public SymbolTable getSymbolTable(ASTNode node) {
     Visitor visitor = new Visitor();
     node.accept(visitor);
     Deque<Map<String, String>> typeMap = new ArrayDeque<Map<String, String>>();
     typeMap.push(visitor.typeMap);
 
-    return new ISymbolTable() {
+    return new SymbolTable() {
       @Override
       public String getType(String name) {
         for (Map<String, String> map : typeMap) {

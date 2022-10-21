@@ -3,11 +3,14 @@ package edu.byu.cs329.typechecker;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 
-public interface ISymbolTable {
+/**
+ * Symbol table interface.
+ */
+public interface SymbolTable {
 
   /**
    * Gives the type associated with a name.
-   * 
+   *
    * @ensures name \in INT ==> type = INT
    * @ensures name \in BOOL ==> type = BOOL
    * @ensures name \in TypeMap ==> type = TypeMap(name)
@@ -25,7 +28,7 @@ public interface ISymbolTable {
 
   /**
    * Gives the parameters and types associated with the named method.
-   * 
+   *
    * @param name a method reference as "class"."method" as in "A.m",
    * @return the type list for associated parameter names
    */
@@ -43,7 +46,7 @@ public interface ISymbolTable {
 
   /**
    * Associates the type with the name in the top scope on the stack.
-   * 
+   *
    * @requires name \not\in Types
    * 
    * @ensures name \in Types /\ Types(name) = type

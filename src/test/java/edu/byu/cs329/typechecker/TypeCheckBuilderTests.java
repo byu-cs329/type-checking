@@ -23,7 +23,7 @@ public class TypeCheckBuilderTests {
   private boolean getTypeChecker(final String fileName, List<DynamicNode> tests) {
     ASTNode compilationUnit = JavaSourceUtils.getAstNodeFor(this, fileName);
     SymbolTableBuilder symbolTableBuilder = new SymbolTableBuilder();
-    ISymbolTable symbolTable = symbolTableBuilder.getSymbolTable(compilationUnit);
+    SymbolTable symbolTable = symbolTableBuilder.getSymbolTable(compilationUnit);
     TypeCheckBuilder typeCheckerBuilder = new TypeCheckBuilder();
     return typeCheckerBuilder.getTypeChecker(symbolTable, compilationUnit, tests);
   }
