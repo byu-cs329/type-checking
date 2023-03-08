@@ -32,7 +32,7 @@ A general overview of what is and is not allowed in the Java subset for this pro
 * `PrefixExpression` instances for operator `!` are `boolean:boolean`
 * `InfixExpression` instances for operator `==` are always `Object,Object:boolean` where `Object` is an object type or `nullType`, `int,int:boolean`, or `boolean,boolean:boolean`
 * Assignment, `=`, between objects is like the `==` in that it requires types to be the same but with the added ability te assign objects to `null`, so `object,null:void` is type safe.
-  
+
 The type-checker must eventually prove the following language features. The notation is the `ASTNode` type followed by the type it should have to be *type-safe*: `<ASTNode>:<type>`. So the `<ASTNode>` should have `<type>` to be type safe. Additionall, the notation `<environment>` is the lookup in the environment to get the type. The types are listed in [TypeCheckTypes.java](./src/main/java/edu/byu/cs329/typechecker/TypeCheckTypes.java).
 
 * `MethodDeclaration:void` (provided)
@@ -55,6 +55,18 @@ The type-checker must eventually prove the following language features. The nota
 * `MethodInvocation:<environment>`
 
 If something seems unusually hard then reach out to the instructor as it is most likely out of scope or not intended.
+
+Here is a simple example that results in a `QualifiedName`.
+
+```java
+public class C {
+  static int f;
+
+  void g() {
+    C.f = 10;
+  }
+}
+```
 
 ## Symbol Table Interface
 

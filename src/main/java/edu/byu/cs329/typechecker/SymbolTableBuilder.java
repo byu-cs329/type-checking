@@ -112,17 +112,17 @@ public class SymbolTableBuilder {
     }
 
     private void checkModifiers(int modifiers) {
-      int mask = ~(Modifier.PRIVATE | Modifier.PUBLIC | Modifier.PROTECTED);
+      int mask = ~(Modifier.PRIVATE | Modifier.PUBLIC | Modifier.PROTECTED | Modifier.STATIC);
       if ((modifiers & mask) != 0) {
         ExceptionUtils.throwRuntimeException(
-            "only private, public, and protected are supported as modifiers");
+            "only private, public, protected, and static are supported as modifiers");
       }
     }
 
   }
 
   public SymbolTableBuilder() {
-    
+
   }
 
   /**
@@ -130,7 +130,7 @@ public class SymbolTableBuilder {
    *
    * @requires node instanceof CompilationUnit
    * @requires node is the AST for a supported program
-   * 
+   *
    * @param node is a CompilationUnit
    * @return the symbol table for the CompilationUnit
    */
